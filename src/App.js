@@ -5,15 +5,21 @@
 */
 
 // Import the state hook
-import React from 'react';
+import React, {useState} from 'react';
 // Import the Posts (plural!) and SearchBar components, since they are used inside App component
+import Posts from './components/Posts/Posts'
+import SearchBar from './components/SearchBar/SearchBar'
 // Import the dummyData
+import dummyData from './dummy-data'//we don't need the .js because it is just the name
 import './App.css';
 
 const App = () => {
   // Create a state called `posts` to hold the array of post objects, **initializing to dummyData**.
+  const [posts, setPosts] = useState(dummyData);//these live in the parent and are being passed down to the children so you can access them and do whatever you want to do with them
   // This state is the source of truth for the data inside the app. You won't be needing dummyData anymore.
   // To make the search bar work (which is stretch) we'd need another state to hold the search term.
+  //useState returns an array.
+  console.log(posts);
 
   const likePost = postId => {
     /*
@@ -27,14 +33,32 @@ const App = () => {
         - if the `id` of the post matches `postId`, return a new post object with the desired values (use the spread operator).
         - otherwise just return the post object unchanged.
      */
-  };
+    const updatedLike = posts.map(post => {
+      if (post.id === postId) {
+        return {...post, likes: post.likes + 1} //find out what this is doing exactly
+      } else {
+        return post
+      }
+    })
+    setPosts(updatedLike)
+  }; // another way is: setPosts(posts.map => {
+          //if(id === postId){
+            //return {...post, likes: post.likes +1}
+        // }
+    //    return post;
+  //   })
 
   return (
     <div className='App'>
       {/* Add SearchBar and Posts here to render them */}
+      <SearchBar />
+      <Posts likePost={likePost} posts={posts}/>
       {/* Check the implementation of each component, to see what props they require, if any! */}
     </div>
   );
 };
 
 export default App;
+
+
+ 
